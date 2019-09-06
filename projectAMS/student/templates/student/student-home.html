@@ -1,0 +1,93 @@
+<!--
+    author : geekyAnand
+    © pyJaC
+-->
+ 
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<title> NITN-AMS | {{user_instance.reg_no}} </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'student/css/student-home.css' %}">
+</head>
+<body>
+	<div class="site_content">
+		<div class="ams-navbar">
+			<div>
+				<a class="ams-header-logo_link" target="_blank" href="https://nitnagaland.ac.in">
+					<img class="ams-logo" src="{% static 'student/img/nitn_logo.png' %}">
+				</a>
+			</div>
+			<h1> NIT Nagaland - Attendance Management System  </h1>
+			<a  class="student-logout" href="{% url 'student_logout' %}"> LOGOUT </a>
+		</div>
+
+
+
+		<div id="wrapper">
+			<div>
+			<div id="leftcolumn">
+				<div class="ams-details_wrapper">
+					<div class="id_card" id="V_Card">
+						<div id="card_head">
+							<img class="id_card_logo" src="{% static 'student/img/nitn_logo.png' %}" />
+							<div id="header_div">
+								<p><b>राष्ट्रीय प्रौद्योगिकी संस्थान नागालैंड <br>NATIONAL INSTITUTE OF TECHNOLOGY NAGALAND</b><br>
+								(An Institue of National Importance under MHRD,Government of India)<br>Chumukedima, Dimapur, Nagaland - 797 103</p>
+						</div>
+					</div>
+					
+					
+					<div id="card_body">
+						<div id="card_write">
+							<br><br><b>Student Name  </b>: {{user_instance.name}}
+							<br><br><b>Registration No. </b>: {{user_instance.reg_no}}
+							<br><br><b>Branch </b>: {{user_instance.department}}
+							<br><br><b>Semester</b>: {{ stu_sem }}
+							<br><br><b>Email ID</b>: {{ user_instance.email }}
+						</div>
+						<img class="id_card_avatar" id="stud_img" alt="Photo of Student" src="{% static 'student/img/studentPhoto.png' %}" alt="Photo of Student">
+					</div>
+					</div>
+				</div>
+			</div>
+			<div id="rightcolumn">
+			<div class="ams-attendance_table">
+				<h1>Attendance Statistics</h1>
+				<div class="ams-table">
+					<table class="ams-table__table">
+						<tr class="ams-table-header">
+							<th> Course Code </th>
+							<th> Total Classes</th>
+							<th> Classes Attended</th>
+							<th> Attendance %</th>
+
+						</tr>
+						{% for attendance in att_data_list %}
+						<tr class="ams-table__row ams-table-header">
+							<td class="ams-table__cell"><span class="ams-table__value">{{ attendance.course_code }}</span></td>
+							<td class="ams-table__cell"><span class="ams-table__value">{{ attendance.total_classes }}</span></td>
+							<td class="ams-table__cell"><span class="ams-table__value">{{ attendance.attended }}</span></td>
+							<td class="ams-table__cell"><span class="ams-table__value">{{ attendance.percent|floatformat:1 }}</span></td>
+							
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>	
+			</div>
+
+		</div>
+		</div>
+		
+	</div>
+	<footer class="footer">
+		<span>Developed by Anand Kumar Dubey & Shraddha Kishan Tripathi (CSE 2017)</span>
+		<span>Under guidance of Nagaraju Baydeti (Asst. Professor, CSE)</span>
+	</footer>
+	
+</body>
+</html>

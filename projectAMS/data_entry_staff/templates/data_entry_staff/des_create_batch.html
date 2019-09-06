@@ -1,0 +1,115 @@
+<!--
+	author: geekyAnand
+	© pyJaC
+-->
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>NITN-AMS | DES Create Batch</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'data_entry_staff/css/des.css' %}">	
+
+</head>
+
+<body>
+	<div class="hod_main_body hod_view_att_main_body">
+		<div class="ams-hod_navbar">
+			<div>
+				<div class="ams-navbar_logo ">
+					<a class="ams-header-logo_link" target="_blank" href="https://nitnagaland.ac.in">
+						<img src="{% static 'student/img/nitn_logo.png' %}">
+					</a>
+				</div>
+				<h1 id="left_h1"> NIT Nagaland </h1> <h1 id="right_h1"> Attendance Management System </h1>
+				<span></span>
+			</div>
+			<div class="ams-navbar_links">
+				<div class="dropdown">
+						<a href="{% url 'des_create_batch' %}">
+							<button class="dropbtn">CREATE BATCH</button>
+						</a>
+					</div>		
+					<div class="dropdown">
+						<a href="{% url 'des_add_course' %}">
+							<button class="dropbtn">ADD COURSE</button>
+						</a>
+					</div>
+					<div class="dropdown">
+						<a href="{% url 'des_combine_courses' %}">
+							<button class="dropbtn">ASSIGN ELECTIVES</button>
+						</a>
+					</div>
+					<div class="dropdown">
+						<a href="{% url 'des_logout' %}">
+							<button class="dropbtn">LOGOUT</button>
+						</a>
+					</div>
+			</div>
+		</div>
+
+		<div class="site_container">
+			<div class="option-picker">	
+				<form method="POST" name="select_option_form" >
+					{% csrf_token %}
+					<select name="new_batch_dep" required>
+						<option value="" disabled selected>Select Department</option>
+						{% for department in dep_list %}
+						<option value="{{ department }}">{{ department }}</option>
+						{% endfor %}
+					</select>
+					<input type="text" name="new_batch_year" placeholder="Year" pattern="^20[0-9]{2}$" title="1999 < Year < 2100" required>
+					<input type="text" name="starting_roll_no" placeholder="Starting Reg. No." pattern="^\d{3}$" title="Last 3 digits of first roll no." required>
+					<input type="text" name="new_batch_size" placeholder="No. of Students" pattern="^[0-9]*$" title="Only number" required>
+					<button type="submit" name="new_batch_option_btn"  class="hod_button btn draw-border">SUBMIT</button>
+				</form>
+			</div>
+			{% if no_of_students %}
+			<form method="POST" id="student_data_form">
+				{% csrf_token %}
+				<input type="hidden" name="new_batch_first_roll" id="attendance_date" value="{{ first_roll_no }}">
+				<input type="hidden" name="no_of_students" value="{{ no_of_students|last|add:1 }}">
+				<input type="hidden" name="new_batch_department" value="{{ department }}">
+				
+				<div class="ams-table">
+					<table class="ams-table__table">
+						<tr class="ams-table-header ">
+							<th > Registration No. </th> 	<!--non editable-->  
+							<th> Student's Name </th>
+							<th> Student's Email </th>
+							<th > Department </th>     <!--non editable-->  
+						</tr>
+
+						{% for i in no_of_students %}
+						<tr class="ams-table__row ams-table-header">
+							<td class="ams-table__cell" style=" width: 90px; max-width: 120px;"><span class="ams-table__value"><input style=" width: 90px; max-width: 120px;" type="text" name="nb_reg_{{ first_roll_no|add:i }}" value="{{ first_roll_no|add:i }}" tabindex="-1" readonly></span></td>
+							<td class="ams-table__cell"><span class="ams-table__value"><input style=" width: 80%; max-width: 85%;" type="text" name="nb_name_{{ first_roll_no|add:i }}" placeholder="Student's Name" value="" required></span></td>
+							<td class="ams-table__cell"><span class="ams-table__value"><input style=" width: 80%; max-width: 85%;" type="text" name="nb_email_{{ first_roll_no|add:i }}" placeholder="Student's Email" value="" required></span></td>
+							<td class="ams-table__cell" style=" width: 90px; max-width: 120px;"><span class="ams-table__value"><input style=" width: 35px; max-width: 90px;" type="text" name="student_dep" placeholder="Student's Department" value="{{ department }}" tabindex="-1" readonly></span></td>
+						</tr>
+						{% endfor %}
+						
+					</table>
+				</div>
+				<button type="submit" name="new_batch_submit_btn" class="hod_button btn draw-border" >SUBMIT</button>
+			</form>
+			{% elif error %}
+			<h4>{{ error }}</h4>
+			{% elif success %}
+			<h4>{{ success }}</h4>
+			{% else %}
+			<h1>Enter the required details to create a new batch.</h1>
+			{% endif %}
+
+		</div>
+	</div>
+	<footer class="footer">
+		<span>Developed by Anand Kumar Dubey & Shraddha Kishan Tripathi (CSE 2017)</span>
+		<span>Under guidance of Nagaraju Baydeti (Asst. Professor, CSE)</span>
+	</footer>
+</body>
+</html>

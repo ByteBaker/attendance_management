@@ -1,0 +1,131 @@
+<!--
+	author: geekyAnand
+	© pyJaC
+-->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>NITN-AMS | DES Add Electives</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'HOD/css/hod_home.css' %}">	
+	<link rel="stylesheet" type="text/css" href="{% static 'data_entry_staff/css/des.css' %}">	
+
+</head>
+	
+<body>
+	<div class="hod_main_body hod_view_att_main_body">
+		<div class="ams-hod_navbar">
+			<div>
+				<div class="ams-navbar_logo ">
+					<a class="ams-header-logo_link" target="_blank" href="https://nitnagaland.ac.in">
+						<img src="{% static 'student/img/nitn_logo.png' %}">
+					</a>
+				</div>
+				<h1 id="left_h1"> NIT Nagaland </h1> <h1 id="right_h1"> Attendance Management System </h1>
+				<span></span>
+			</div>
+			<div class="ams-navbar_links">
+				<div class="dropdown">
+						<a href="{% url 'des_create_batch' %}">
+							<button class="dropbtn">CREATE BATCH</button>
+						</a>
+					</div>		
+					<div class="dropdown">
+						<a href="{% url 'des_add_course' %}">
+							<button class="dropbtn">ADD COURSE</button>
+						</a>
+					</div>
+					<div class="dropdown">
+						<a href="{% url 'des_combine_courses' %}">
+							<button class="dropbtn">ASSIGN ELECTIVES</button>
+						</a>
+					</div>
+					<div class="dropdown">
+						<a href="{% url 'des_logout' %}">
+							<button class="dropbtn">LOGOUT</button>
+						</a>
+					</div>
+			</div>
+		</div>
+		<div class="site-container">
+			<div class="option-picker">
+				<form method="POST">
+					{% csrf_token %}
+					<select name="select_department" required>
+						<option value="" disabled selected>Select Department</option>
+						{% for department in dep_list %}
+						<option value="{{ department }}">{{ department }}</option>
+						{% endfor %}
+					</select>
+					<select name="select_year" required>
+						<option value="" disabled selected>Select Batch</option>
+						{% for year in year_list %}
+						<option value="{{ year }}">{{ year }}</option>
+						{% endfor %}
+					</select>
+					<select name="select_semester" aria-placeholder="Select">
+						<option value="" disabled selected>Select Semester</option>
+						<option value="5">Semester 5</option>
+						<option value="6">Semester 6</option>
+						<option value="7">Semester 7</option>
+						<option value="8">Semester 8</option>
+					</select>
+					<button type="submit" name="combine_course_filter_btn" id="submit_option_selector">SUBMIT</button>
+				</form>
+			</div>
+			{% if elective %}
+			<form method="POST">
+					{% csrf_token %}
+					<input type="hidden" name="elective_year" value="{{ elective.elective_year }}">
+					<input type="hidden" name="elective_department" value="{{ elective.elective_department }}">
+					<input type="hidden" name="elective_semester" value="{{ elective.elective_semester }}">
+					<div class="ams-attendance_table">
+						<div class="ams-table ams-hod_edit_table">
+							<table class="ams-table__table">
+								<tr class="ams-table-header ">
+									<th>COURSE CODE</th>
+									<th> COURSE TITLE</th>
+									<th> IS ELECTIVE?</th>
+								</tr>
+								
+								{% for course in elective.courses %}
+								<tr class="ams-table__row ams-table-header">
+									<td class="ams-table__cell"><span class="ams-table__value">{{ course.course_code }}</span></td>
+									<td class="ams-table__cell"><span class="ams-table__value">{{ course.title }}</span></td>
+									<td class="ams-table__cell" >
+										<span class="ams-table__value">
+											<div class="toggler-container" style="height: 40px;">
+												
+												<input type="checkbox" class="checkbox check1" name="elective_choice_{{ course.course_code }}"/>
+												
+												
+											</div>
+										</span>
+									</td>
+								</tr>
+								{% endfor %}
+								
+							</table>
+						</div>
+						<button style="font-size:1.2rem;" type="submit" name="combine_course_submit_btn" class="hod_button btn draw-border" {% if not elective.courses %} disabled="disabled" {% endif %}>SUBMIT ELECTIVES</button>
+					</div>
+					</form>
+			{% elif success %}
+			<div><h4>{{ success }}</h4></div>
+			{% elif error %}
+			<div><h4>{{ error }}</h4></div>
+			{% else %}
+			<div><h1>Select department, batch, and semester to choose electives.</h1></div>
+			{% endif %}
+		</div>
+	</div>
+	<footer class="footer">
+		<span>Developed by Anand Kumar Dubey & Shraddha Kishan Tripathi (CSE 2017)</span>
+		<span>Under guidance of Nagaraju Baydeti (Asst. Professor, CSE)</span>
+	</footer>
+</body>
+</html>

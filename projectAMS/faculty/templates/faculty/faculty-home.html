@@ -1,0 +1,59 @@
+<!--
+	author: geekyAnand
+	© pyJaC
+-->
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NITN-AMS | Faculty Home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'faculty/css/faculty-home.css' %}">
+	
+</head>
+<body>
+	<div class="main_body">
+		<div class="ams-faculty_navbar">
+			<div>
+			<div class="ams-navbar_logo">
+				<a class="ams-header-logo_link" target="_blank" href="https://nitnagaland.ac.in">
+					<img src="{% static 'student/img/nitn_logo.png' %}">
+				</a>
+			</div>
+			<h1 id="left_h1"> NIT Nagaland </h1> <h1 id="right_h1"> Attendance Management System  </h1>
+			<span></span>
+			</div>
+			<div class="ams-navbar_links">
+				<a class="link_1" href="{% url 'faculty_view_attend' %}">VIEW ATTENDANCE</a>
+				<a class="link_2" href="{% url 'update_attend' %}">UPDATE ATTENDANCE</a>
+				<a class="link_3" href="{% url 'faculty_logout' %}"> LOGOUT </a>
+				
+			</div>
+		</div>
+
+		<div class="site-container">
+			<h1 >Please select any of the above options to continue...</h1>
+			<div class="attendance_report_div" onclick="document.getElementById('modal_frame').src='{% url 'attendance_report' %}'; document.getElementsByClassName('bg-modal')[0].style.display='flex';">
+				<button type="submit" class="hod_button btn draw-border">ATTENDANCE REPORT</button>
+			</div>
+			<div class="lesson_plan" onclick="document.getElementById('modal_frame').src='{% url 'lesson_plan' %}'; document.getElementsByClassName('bg-modal')[0].style.display='flex';">
+				<button type="submit" class="hod_button btn draw-border">LESSON PLAN</button>
+			</div>
+		</div>
+	</div>
+	<div class="bg-modal">
+		<div class="modal-content">
+			<div class="close">+</div>
+			<iframe id="modal_frame" src=""></iframe>
+		</div>
+	</div>
+	<footer class="footer">
+		<span>Developed by Anand Kumar Dubey & Shraddha Kishan Tripathi (CSE 2017)</span>
+		<span>Under guidance of Nagaraju Baydeti (Asst. Professor, CSE)</span>
+	</footer>
+	
+
+	<script src="{% static 'authentication/js/ams.js' %}"></script>
+</body>
+</html>
